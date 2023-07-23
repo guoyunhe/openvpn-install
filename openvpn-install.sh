@@ -50,12 +50,13 @@ function checkOS() {
 				fi
 			fi
 		fi
-	elif [[ -e /etc/system-release ]]; then
+	elif [[ -e /etc/os-release ]]; then
 		source /etc/os-release
 		if [[ $ID == "fedora" || $ID_LIKE == "fedora" ]]; then
 			OS="fedora"
-		fi
-		if [[ $ID == "centos" || $ID == "rocky" || $ID == "almalinux" ]]; then
+		elif [[ $ID == "opensuse-leap" || $ID == "opensuse-tumbleweed" ]]; then
+			OS="opensuse"
+		elif [[ $ID == "centos" || $ID == "rocky" || $ID == "almalinux" ]]; then
 			OS="centos"
 			if [[ $VERSION_ID -lt 7 ]]; then
 				echo "⚠️ Your version of CentOS is not supported."
@@ -64,8 +65,7 @@ function checkOS() {
 				echo ""
 				exit 1
 			fi
-		fi
-		if [[ $ID == "ol" ]]; then
+		elif [[ $ID == "ol" ]]; then
 			OS="oracle"
 			if [[ ! $VERSION_ID =~ (8) ]]; then
 				echo "Your version of Oracle Linux is not supported."
@@ -73,8 +73,7 @@ function checkOS() {
 				echo "The script only support Oracle Linux 8."
 				exit 1
 			fi
-		fi
-		if [[ $ID == "amzn" ]]; then
+		elif [[ $ID == "amzn" ]]; then
 			OS="amzn"
 			if [[ $VERSION_ID != "2" ]]; then
 				echo "⚠️ Your version of Amazon Linux is not supported."
@@ -86,8 +85,10 @@ function checkOS() {
 		fi
 	elif [[ -e /etc/arch-release ]]; then
 		OS=arch
-	else
-		echo "Looks like you aren't running this installer on a Debian, Ubuntu, Fedora, CentOS, Amazon Linux 2, Oracle Linux 8 or Arch Linux system"
+	fi
+
+	if [[ -z "$OS" ]]; then
+		echo "Looks like you aren't running this installer on a Debian, Ubuntu, Fedora, openSUSE, CentOS, Amazon Linux 2, Oracle Linux 8 or Arch Linux system"
 		exit 1
 	fi
 }
