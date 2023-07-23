@@ -698,6 +698,8 @@ function installOpenVPN() {
 			yum install -y openvpn iptables openssl wget ca-certificates curl
 		elif [[ $OS == 'fedora' ]]; then
 			dnf install -y openvpn iptables openssl wget ca-certificates curl policycoreutils-python-utils
+		elif [[ $OS == 'opensuse' ]]; then
+			zypper install -y openvpn iptables openssl wget ca-certificates curl policycoreutils-python-utils
 		elif [[ $OS == 'arch' ]]; then
 			# Install required dependencies and upgrade the system
 			pacman --needed --noconfirm -Syu openvpn iptables openssl wget ca-certificates curl
