@@ -937,7 +937,7 @@ verb 3" >>/etc/openvpn/server.conf
 	fi
 
 	# Finally, restart and enable OpenVPN
-	if [[ $OS == 'arch' || $OS == 'fedora' || $OS == 'centos' || $OS == 'oracle' ]]; then
+	if [[ $OS == 'arch' || $OS == 'fedora' || $OS == 'opensuse' || $OS == 'centos' || $OS == 'oracle' ]]; then
 		# Don't modify package-provided service
 		cp /usr/lib/systemd/system/openvpn-server@.service /etc/systemd/system/openvpn-server@.service
 
@@ -1226,6 +1226,8 @@ function removeUnbound() {
 			yum remove -y unbound
 		elif [[ $OS == 'fedora' ]]; then
 			dnf remove -y unbound
+		elif [[ $OS == 'opensuse' ]]; then
+			zypper remove -y unbound
 		fi
 
 		rm -rf /etc/unbound/
@@ -1248,7 +1250,7 @@ function removeOpenVPN() {
 		PROTOCOL=$(grep '^proto ' /etc/openvpn/server.conf | cut -d " " -f 2)
 
 		# Stop OpenVPN
-		if [[ $OS =~ (fedora|arch|centos|oracle) ]]; then
+		if [[ $OS =~ (fedora|opensuse|arch|centos|oracle) ]]; then
 			systemctl disable openvpn-server@server
 			systemctl stop openvpn-server@server
 			# Remove customised service
@@ -1293,6 +1295,8 @@ function removeOpenVPN() {
 			yum remove -y openvpn
 		elif [[ $OS == 'fedora' ]]; then
 			dnf remove -y openvpn
+		elif [[ $OS == 'opensuse' ]]; then
+			zypper remove -y openvpn
 		fi
 
 		# Cleanup
